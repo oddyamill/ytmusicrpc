@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    "types": ["@types/tampermonkey"]
+  },
+  "include": ["userscript/ytmusicrpc.user.js"]
+}
