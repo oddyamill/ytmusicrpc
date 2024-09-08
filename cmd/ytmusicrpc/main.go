@@ -69,7 +69,7 @@ func updatePresence(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if body.Album == "" || body.Artist == "" || body.Artwork == "" || body.Current < 0 || body.End == 0 || body.Title == "" || body.TrackId == "" {
+	if body.Artist == "" || body.Artwork == "" || body.Current < 0 || body.End == 0 || body.Title == "" || body.TrackId == "" {
 		http.Error(w, "400 invalid request body", http.StatusBadRequest)
 		return
 	}
@@ -95,7 +95,7 @@ func updatePresence(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	if body.Title != body.Album {
+	if body.Album != "" && body.Title != body.Album {
 		activity.Assets.LargeText = body.Album
 	}
 
