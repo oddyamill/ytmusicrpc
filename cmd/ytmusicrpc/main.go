@@ -51,8 +51,8 @@ type updatePresenceBody struct {
 	Artist  string `json:"artist"`
 	Artwork string `json:"artwork"`
 	Album   string `json:"album"`
-	Current int64  `json:"current"`
-	End     int64  `json:"end"`
+	Current *int64 `json:"current"`
+	End     *int64 `json:"end"`
 }
 
 func updatePresence(w http.ResponseWriter, r *http.Request) {
@@ -69,12 +69,10 @@ func updatePresence(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if body.Artist == "" || body.Artwork == "" || body.Current < 0 || body.End == 0 || body.Title == "" || body.TrackId == "" {
+	if body.Artist == "" || body.Artwork == "" || body.Title == "" || body.TrackId == "" {
 		http.Error(w, "400 invalid request body", http.StatusBadRequest)
 		return
 	}
-
-	timestamp := time.Now().UnixMilli()
 
 	activity := discord.Activity{
 		Type:    activityType,
@@ -82,10 +80,6 @@ func updatePresence(w http.ResponseWriter, r *http.Request) {
 		State:   body.Artist,
 		Assets: discord.Assets{
 			LargeImage: body.Artwork,
-		},
-		Timestamps: discord.Timestamps{
-			Start: timestamp - body.Current,
-			End:   timestamp - body.Current + body.End,
 		},
 		Buttons: []discord.Button{
 			{
@@ -95,8 +89,17 @@ func updatePresence(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	if body.Album != "" && body.Title != body.Album {
+	if body.Album != "" && body.Title != body.Album && body.Artist != body.Album {
 		activity.Assets.LargeText = body.Album
+	}
+
+	if body.Current != nil && body.End != nil {
+		timestamp := time.Now().UnixMilli()
+
+		activity.Timestamps = &discord.Timestamps{
+			Start: timestamp - *body.Current,
+			End:   timestamp - *body.Current + *body.End,
+		}
 	}
 
 	discord.UpdatePresence(activity)

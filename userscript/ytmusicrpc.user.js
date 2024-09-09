@@ -79,8 +79,13 @@
         navigator.mediaSession.metadata.album ||
         [...document.querySelectorAll('.byline a')].at(-1)?.textContent ||
         undefined,
-      current: parse(current),
-      end: parse(end),
+      current: null,
+      end: null,
+    }
+
+    if (end !== undefined) {
+      track.current = parse(current)
+      track.end = parse(end)
     }
 
     updatePresence(track)

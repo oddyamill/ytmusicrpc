@@ -25,17 +25,17 @@ type Args struct {
 }
 
 type Activity struct {
-	Type       int        `json:"type"`
-	Details    string     `json:"details"`
-	State      string     `json:"state"`
-	Assets     Assets     `json:"assets"`
-	Timestamps Timestamps `json:"timestamps"`
-	Buttons    []Button   `json:"buttons"`
+	Type       int         `json:"type"`
+	Details    string      `json:"details"`
+	State      string      `json:"state"`
+	Assets     Assets      `json:"assets"`
+	Timestamps *Timestamps `json:"timestamps,omitempty"`
+	Buttons    []Button    `json:"buttons"`
 }
 
 type Assets struct {
 	LargeImage string `json:"large_image"`
-	LargeText	string `json:"large_text,omitempty"`
+	LargeText  string `json:"large_text,omitempty"`
 }
 
 type Timestamps struct {
